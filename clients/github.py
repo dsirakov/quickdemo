@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from requests import Response
+import requests
+from urllib.parse import urljoin
 
 
 # {
@@ -50,16 +51,17 @@ from requests import Response
 # }
 
 
-class githubUser(BaseModel): ...
+class GithubUser(BaseModel):
+    login: str
 
 
-class githubClient:
+class GithubClient:
     def __init__(self, token) -> None:
         self.token = token
         self.base_url = "https://api.github.com"
 
-    def _request(self, url: str, params: dict, data: dict) -> Response: ...
-
-    def get_authenticathed_user(self, username: str) -> githubUser:
+    def get_authenticated_user(self) -> GithubUser:
         endpoint = "/user"
-        ...
+        response = requests.get(urljoin(self.base_url, endpoint))
+
+        return GithubUser.model_validate_json(response.json())
