@@ -1,4 +1,4 @@
-from mappers import (
+from quickcli.mappers import (
     github_to_freshdesk_user_mapper,
     GithubUser,
     FreshdeskContact,

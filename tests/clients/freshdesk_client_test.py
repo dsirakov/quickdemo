@@ -4,20 +4,21 @@ import json
 import responses
 from requests import HTTPError
 from requests.auth import HTTPBasicAuth
-from clients.freshdesk import FreshdeskClient, FreshdeskContact
+from quickcli.clients.freshdesk import FreshdeskClient, FreshdeskContact
 from unittest.mock import patch, call
 
 
 FRESHDESK_TOKEN = "token-value"
+SUBDOMAIN = "domain"
 
 
 @pytest.fixture(scope="module")
 def mock_client() -> FreshdeskClient:
-    return FreshdeskClient(FRESHDESK_TOKEN)
+    return FreshdeskClient(FRESHDESK_TOKEN, SUBDOMAIN)
 
 
 def test_create_contact__ok(mock_client, freshdesk_contact):
-    expected_url = urljoin("https://domain.freshdesk.com", "/api/v2/contacts")
+    expected_url = urljoin(f"https://{SUBDOMAIN}.freshdesk.com", "/api/v2/contacts")
     expected_headers = {"Content-Type": "application/json"}
     create_contact = FreshdeskContact.model_validate(freshdesk_contact)
 

@@ -1,5 +1,5 @@
-from clients.github import GithubUser
-from clients.freshdesk import FreshdeskContact
+from quickcli.clients.github import GithubUser
+from quickcli.clients.freshdesk import FreshdeskContact
 
 
 def github_to_freshdesk_user_mapper(github_user: GithubUser) -> FreshdeskContact:

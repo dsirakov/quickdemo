@@ -3,7 +3,7 @@ import pytest
 import json
 import responses
 from requests import HTTPError
-from clients.github import GithubClient, GithubUser
+from quickcli.clients.github import GithubClient, GithubUser
 from unittest.mock import patch, call
 
 

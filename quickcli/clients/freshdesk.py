@@ -28,8 +28,8 @@ class FreshdeskContact(BaseModel):
 
 
 class FreshdeskClient:
-    def __init__(self, token) -> None:
-        self.base_url = "https://domain.freshdesk.com"
+    def __init__(self, token: str, subdomain: str) -> None:
+        self.base_url = f"https://{subdomain}.freshdesk.com"
         self.token = token
         self.headers = {
             "Content-Type": "application/json",
