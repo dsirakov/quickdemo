@@ -1,6 +1,6 @@
 import argparse
 
-from quickcli.utils import verify_environemnt
+from quickcli.utils import verify_environment
 from clients.github import GithubClient
 from clients.freshdesk import FreshdeskClient
 from quickcli.mappers import github_to_freshdesk_user_mapper
@@ -8,7 +8,7 @@ from quickcli.mappers import github_to_freshdesk_user_mapper
 
 def app():
 
-    github_token, freshdesk_token = verify_environemnt()
+    github_token, freshdesk_token = verify_environment()
 
     parser = argparse.ArgumentParser(description="Quickdemo CLI app")
     parser.add_argument("username", help="Github username")

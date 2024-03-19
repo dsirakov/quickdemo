@@ -2,7 +2,7 @@ import os
 import sys
 
 
-def verify_environemnt() -> tuple:
+def verify_environment() -> tuple:
     github_token = os.getenv("GITHUB_TOKEN")
     freshdesk_token = os.getenv("FRESHDESK_TOKEN")
 
