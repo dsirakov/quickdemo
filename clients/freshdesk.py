@@ -29,16 +29,16 @@ class FreshdeskContact(BaseModel):
 
 class FreshdeskClient:
     def __init__(self, token) -> None:
-        self.base_url = "https://domain.freshdesk.com/api/v2"
+        self.base_url = "https://domain.freshdesk.com"
         self.token = token
         self.headers = {
             "Content-Type": "application/json",
         }
-        self.auth = HTTPBasicAuth("X", token)
+        self.auth = HTTPBasicAuth(token, "X")
 
     def create_contact(self, contact: FreshdeskContact) -> str:
-        endpoint = "/contacts"
-        data = FreshdeskContact.model_dump()
+        endpoint = "/api/v2/contacts"
+        data = FreshdeskContact.model_dump(contact)
         response = requests.post(
             urljoin(self.base_url, endpoint),
             headers=self.headers,
