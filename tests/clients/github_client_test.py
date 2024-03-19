@@ -73,7 +73,7 @@ def test_get_user__ok(mock_client):
         user = mock_client.get_authenticated_user()
 
     assert mock_request.call_args == call(expected_url, headers=expected_headers)
-    assert user == json.dumps(GITHUB_USER)
+    assert user == GithubUser.model_validate(GITHUB_USER)  # json.dumps(GITHUB_USER)
 
 
 def test_get_user__raises_error(mock_client):
