@@ -23,4 +23,4 @@ class GithubClient:
         response = requests.get(urljoin(self.base_url, endpoint), headers=self.headers)
         response.raise_for_status()
 
-        return GithubUser.model_validate_json(response.json())
+        return response.json()
