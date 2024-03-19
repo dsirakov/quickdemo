@@ -9,14 +9,6 @@ from unittest.mock import patch, call
 
 
 FRESHDESK_TOKEN = "token-value"
-FRESHDESK_CONTACT = {
-    "name": "some name",
-    "email": "some email",
-    "phone": "some phone",
-    "mobile": "some mobile",
-    "twitter_id": "some twitter_id",
-    "unique_external_id": "some unique external id",
-}
 
 
 @pytest.fixture(scope="module")
@@ -24,10 +16,10 @@ def mock_client() -> FreshdeskClient:
     return FreshdeskClient(FRESHDESK_TOKEN)
 
 
-def test_create_contact__ok(mock_client):
+def test_create_contact__ok(mock_client, freshdesk_contact):
     expected_url = urljoin("https://domain.freshdesk.com", "/api/v2/contacts")
     expected_headers = {"Content-Type": "application/json"}
-    create_contact = FreshdeskContact.model_validate(FRESHDESK_CONTACT)
+    create_contact = FreshdeskContact.model_validate(freshdesk_contact)
 
     with patch("requests.post") as mock_request:
         mock_request.return_value.json.return_value = json.dumps({})
@@ -42,9 +34,9 @@ def test_create_contact__ok(mock_client):
 
 
 @responses.activate
-def test_create_contact__raises_error(mock_client):
+def test_create_contact__raises_error(mock_client, freshdesk_contact):
     expected_url = urljoin("https://domain.freshdesk.com", "/api/v2/contacts")
-    create_contact = FreshdeskContact.model_validate(FRESHDESK_CONTACT)
+    create_contact = FreshdeskContact.model_validate(freshdesk_contact)
     responses.add(responses.POST, expected_url, json={}, status=400)
 
     with pytest.raises(HTTPError):
