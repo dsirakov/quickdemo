@@ -23,10 +23,6 @@ def app():
 
     freshdesk_client.create_contact(freshdesk_contact)
 
-    # Print a greeting
-    print(f"Hello, {username}!")
-    print(f"Hello, {subdomain}!")
-
 
 if __name__ == "__main__":
     app()
