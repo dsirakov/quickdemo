@@ -1,8 +1,8 @@
 import argparse
 
 from quickcli.utils import verify_environment
-from clients.github import GithubClient
-from clients.freshdesk import FreshdeskClient
+from quickcli.clients.github import GithubClient
+from quickcli.clients.freshdesk import FreshdeskClient
 from quickcli.mappers import github_to_freshdesk_user_mapper
 
 

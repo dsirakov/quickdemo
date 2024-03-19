@@ -1,5 +1,8 @@
 import os
 import sys
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def verify_environment() -> tuple:
@@ -15,7 +18,7 @@ def verify_environment() -> tuple:
 
     if errors:
         for error in errors:
-            print(error)
+            logger.error(error)
         sys.exit(1)
 
     return github_token, freshdesk_token
