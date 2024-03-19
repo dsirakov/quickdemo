@@ -1,6 +1,7 @@
 import os
 import sys
 import logging
+import argparse
 
 logger = logging.getLogger(__name__)
 
@@ -22,3 +23,12 @@ def verify_environment() -> tuple:
         sys.exit(1)
 
     return github_token, freshdesk_token
+
+
+def parse_args(args: list):
+    parser = argparse.ArgumentParser(description="Quickdemo CLI app")
+    parser.add_argument("username", help="Github username")
+    parser.add_argument("subdomain", help="Freshdesk subdomain")
+    parsed = parser.parse_args(args)
+
+    return parsed.username, parsed.subdomain
