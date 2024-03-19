@@ -1,12 +1,14 @@
 from urllib.parse import urljoin
 import pytest
 import json
+import responses
 from requests import HTTPError
 from clients.github import GithubClient, GithubUser
 from unittest.mock import patch, call
 
 
 GITHUB_TOKEN = "token-value"
+GITHUB_USERNAME = "octocat"
 GITHUB_USER = {
     "login": "octocat",
     "id": 1,
@@ -61,7 +63,8 @@ def mock_client() -> GithubClient:
 
 
 def test_get_user__ok(mock_client):
-    expected_url = urljoin("https://api.github.com", "/user")
+    username = "octocat"
+    expected_url = urljoin("https://api.github.com", f"/user/{username}")
     expected_headers = {
         "Accept": "application/vnd.github+json",
         "Authorization": f"Bearer {GITHUB_TOKEN}",
@@ -70,15 +73,18 @@ def test_get_user__ok(mock_client):
 
     with patch("requests.get") as mock_request:
         mock_request.return_value.json.return_value = json.dumps(GITHUB_USER)
-        user = mock_client.get_authenticated_user()
+        user = mock_client.get_user(GITHUB_USERNAME)
 
     assert mock_request.call_args == call(expected_url, headers=expected_headers)
     assert user == GithubUser.model_validate(GITHUB_USER)  # json.dumps(GITHUB_USER)
 
 
+@responses.activate
 def test_get_user__raises_error(mock_client):
-    with patch("requests.get") as mock_request:
-        mock_request.side_effect = HTTPError
+    username = "octocat"
+    expected_url = urljoin("https://api.github.com", f"/user/{username}")
 
-        with pytest.raises(HTTPError):
-            _ = mock_client.get_authenticated_user()
+    responses.add(responses.GET, expected_url, json=json.dumps(GITHUB_USER), status=400)
+
+    with pytest.raises(HTTPError):
+        _ = mock_client.get_user(GITHUB_USERNAME)

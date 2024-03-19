@@ -57,8 +57,8 @@ class GithubClient:
             "X-GitHub-Api-Version": f"{self.api_version}",
         }
 
-    def get_authenticated_user(self) -> GithubUser:
-        endpoint = "/user"
+    def get_user(self, username: str) -> GithubUser:
+        endpoint = f"/user/{username}"
         response = requests.get(urljoin(self.base_url, endpoint), headers=self.headers)
         response.raise_for_status()
 
