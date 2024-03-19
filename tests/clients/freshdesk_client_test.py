@@ -38,3 +38,12 @@ def test_create_contact__ok(mock_client):
             data=FreshdeskContact.model_dump(create_contact),
             auth=HTTPBasicAuth(FRESHDESK_TOKEN, "X"),
         )
+
+
+def test_create_contact__raises_error(mock_client):
+    with patch("requests.get") as mock_request:
+        mock_request.side_effect = HTTPError
+        create_contact = FreshdeskContact.model_validate(FRESHDESK_CONTACT)
+
+        with pytest.raises(HTTPError):
+            _ = mock_client.create_contact(create_contact)
