@@ -1,6 +1,7 @@
 from urllib.parse import urljoin
 import pytest
 import json
+import responses
 from requests import HTTPError
 from requests.auth import HTTPBasicAuth
 from clients.freshdesk import FreshdeskClient, FreshdeskContact
@@ -30,7 +31,7 @@ def test_create_contact__ok(mock_client):
 
     with patch("requests.post") as mock_request:
         mock_request.return_value.json.return_value = json.dumps({})
-        contact = mock_client.create_contact(create_contact)
+        _ = mock_client.create_contact(create_contact)
 
         assert mock_request.call_args == call(
             expected_url,
@@ -40,10 +41,11 @@ def test_create_contact__ok(mock_client):
         )
 
 
+@responses.activate
 def test_create_contact__raises_error(mock_client):
-    with patch("requests.get") as mock_request:
-        mock_request.side_effect = HTTPError
-        create_contact = FreshdeskContact.model_validate(FRESHDESK_CONTACT)
+    expected_url = urljoin("https://domain.freshdesk.com", "/api/v2/contacts")
+    create_contact = FreshdeskContact.model_validate(FRESHDESK_CONTACT)
+    responses.add(responses.POST, expected_url, json={}, status=400)
 
-        with pytest.raises(HTTPError):
-            _ = mock_client.create_contact(create_contact)
+    with pytest.raises(HTTPError):
+        _ = mock_client.create_contact(create_contact)

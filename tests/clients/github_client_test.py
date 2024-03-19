@@ -75,8 +75,8 @@ def test_get_user__ok(mock_client):
         mock_request.return_value.json.return_value = json.dumps(GITHUB_USER)
         user = mock_client.get_user(GITHUB_USERNAME)
 
-    assert mock_request.call_args == call(expected_url, headers=expected_headers)
-    assert user == GithubUser.model_validate(GITHUB_USER)  # json.dumps(GITHUB_USER)
+        assert mock_request.call_args == call(expected_url, headers=expected_headers)
+        assert user == GithubUser.model_validate(GITHUB_USER)
 
 
 @responses.activate
@@ -84,7 +84,7 @@ def test_get_user__raises_error(mock_client):
     username = "octocat"
     expected_url = urljoin("https://api.github.com", f"/user/{username}")
 
-    responses.add(responses.GET, expected_url, json=json.dumps(GITHUB_USER), status=400)
+    responses.add(responses.GET, expected_url, json={}, status=400)
 
     with pytest.raises(HTTPError):
         _ = mock_client.get_user(GITHUB_USERNAME)
