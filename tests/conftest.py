@@ -9,10 +9,39 @@ def freshdesk_contact():
     return {
         "name": "some name",
         "email": "some email",
-        "phone": "some phone",
-        "mobile": "some mobile",
         "twitter_id": "some twitter_id",
         "unique_external_id": "some unique external id",
+        "description": "some description",
+    }
+
+
+@pytest.fixture
+def created_contact():
+    return {
+        "active": "false",
+        "address": "null",
+        "company_id": 23,
+        "view_all_tickets": "false",
+        "deleted": "false",
+        "description": "null",
+        "email": "superman@freshdesk.com",
+        "id": 432,
+        "job_title": "null",
+        "language": "en",
+        "mobile": "null",
+        "name": "Super Man",
+        "phone": "null",
+        "time_zone": "Chennai",
+        "twitter_id": "null",
+        "other_emails": ["lex@freshdesk.com", "louis@freshdesk.com"],
+        "other_companies": [
+            {"company_id": 25, "view_all_tickets": "true"},
+            {"company_id": 26, "view_all_tickets": "false"},
+        ],
+        "created_at": "2015-08-28T09:08:16Z",
+        "updated_at": "2015-08-28T09:08:16Z",
+        "tags": [],
+        "avatar": "null",
     }
 
 
