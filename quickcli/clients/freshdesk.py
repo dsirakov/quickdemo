@@ -1,5 +1,8 @@
-from pydantic import BaseModel, model_validator
 import requests
+
+from typing import Optional
+from pydantic import BaseModel, model_validator
+
 from requests.auth import HTTPBasicAuth
 from urllib.parse import urljoin
 from typing import Optional
