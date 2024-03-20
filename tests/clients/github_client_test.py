@@ -29,7 +29,9 @@ def test_get_user__ok(mock_client, github_user):
         mock_request.return_value.json.return_value = json.dumps(github_user)
         user = mock_client.get_user(GITHUB_USERNAME)
 
-        assert mock_request.call_args == call(expected_url, headers=expected_headers)
+        assert mock_request.call_args == call(
+            expected_url, headers=expected_headers, timeout=(5, 5)
+        )
         assert user == GithubUser.model_validate(github_user)
 
 

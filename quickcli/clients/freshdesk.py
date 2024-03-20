@@ -35,6 +35,7 @@ class FreshdeskClient:
             "Content-Type": "application/json",
         }
         self.auth = HTTPBasicAuth(token, "X")
+        self.timeout = (5, 5)
 
     def create_contact(self, contact: FreshdeskContact) -> str:
         endpoint = "/api/v2/contacts"
@@ -44,6 +45,7 @@ class FreshdeskClient:
             headers=self.headers,
             auth=self.auth,
             data=data,
+            timeout=self.timeout,
         )
         response.raise_for_status()
 

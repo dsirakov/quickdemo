@@ -31,6 +31,7 @@ def test_create_contact__ok(mock_client, freshdesk_contact):
             headers=expected_headers,
             data=FreshdeskContact.model_dump(create_contact),
             auth=HTTPBasicAuth(FRESHDESK_TOKEN, "X"),
+            timeout=(5, 5),
         )
 
 

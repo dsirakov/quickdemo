@@ -56,10 +56,13 @@ class GithubClient:
             "Authorization": f"Bearer {self.token}",
             "X-GitHub-Api-Version": f"{self.api_version}",
         }
+        self.timeout = (5, 5)
 
     def get_user(self, username: str) -> GithubUser:
         endpoint = f"/user/{username}"
-        response = requests.get(urljoin(self.base_url, endpoint), headers=self.headers)
+        response = requests.get(
+            urljoin(self.base_url, endpoint), headers=self.headers, timeout=self.timeout
+        )
         response.raise_for_status()
 
         return GithubUser.model_validate_json(response.json())
