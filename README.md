@@ -50,5 +50,5 @@ pip install -r requirements-dev.txt
 2. Run the tests:
 
 ```bash
-pytest tests -v
+python -m pytest tests -v
 ```
