@@ -49,11 +49,15 @@ def test_app__requires_arguments(capfd, sys_argv, exepcted_log):
 @patch.dict(os.environ, {"GITHUB_TOKEN": "gh-token-value"})
 @patch.dict(os.environ, {"FRESHDESK_TOKEN": "fd-token-value"})
 @patch.object(sys, "argv", ["quickcli", "cool_programmer", "mydomain"])
-def test_app__accepts_arguments(github_user, freshdesk_contact):
+def test_app__logic(github_user, freshdesk_contact):
     github_user_model = GithubUser.model_validate(github_user)
     freshdesk_contact_model = FreshdeskContact.model_validate(freshdesk_contact)
 
-    with patch.object(
+    with patch(
+        "quickcli.clients.github.GithubClient.__init__", return_value=None
+    ) as gh_client_init, patch(
+        "quickcli.clients.freshdesk.FreshdeskClient.__init__", return_value=None
+    ) as fd_client_init, patch.object(
         GithubClient, "get_user", return_value=github_user_model
     ) as get_user_mock, patch.object(
         FreshdeskClient, "create_contact"
@@ -63,6 +67,8 @@ def test_app__accepts_arguments(github_user, freshdesk_contact):
     ) as mapper_mock:
         app()
 
+    assert gh_client_init.call_args == call("gh-token-value")
+    assert fd_client_init.call_args == call("fd-token-value", "mydomain")
     assert get_user_mock.call_args == call("cool_programmer")
     assert mapper_mock.call_args == call(github_user_model)
     assert create_contact_mock.call_args == call(freshdesk_contact_model)
