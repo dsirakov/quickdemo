@@ -4,7 +4,7 @@ import json
 import responses
 from requests import HTTPError
 from requests.auth import HTTPBasicAuth
-from quickcli.clients.freshdesk import FreshdeskClient, FreshdeskContact
+from quickcli.clients.freshdesk import FreshdeskClient, FreshdeskContact, CreatedContact
 from unittest.mock import patch, call
 
 
@@ -17,22 +17,23 @@ def mock_client() -> FreshdeskClient:
     return FreshdeskClient(FRESHDESK_TOKEN, SUBDOMAIN)
 
 
-def test_create_contact__ok(mock_client, freshdesk_contact):
+def test_create_contact__ok(mock_client, freshdesk_contact, created_contact):
     expected_url = urljoin(f"https://{SUBDOMAIN}.freshdesk.com", "/api/v2/contacts")
     expected_headers = {"Content-Type": "application/json"}
-    create_contact = FreshdeskContact.model_validate(freshdesk_contact)
+    contact_to_create = FreshdeskContact.model_validate(freshdesk_contact)
 
     with patch("requests.post") as mock_request:
-        mock_request.return_value.json.return_value = json.dumps({})
-        _ = mock_client.create_contact(create_contact)
+        mock_request.return_value.json.return_value = json.dumps(created_contact)
+        created = mock_client.create_contact(contact_to_create)
 
         assert mock_request.call_args == call(
             expected_url,
             headers=expected_headers,
-            data=FreshdeskContact.model_dump(create_contact),
+            data=FreshdeskContact.model_dump(contact_to_create),
             auth=HTTPBasicAuth(FRESHDESK_TOKEN, "X"),
             timeout=(5, 5),
         )
+        assert created == CreatedContact.model_validate(created_contact)
 
 
 @responses.activate

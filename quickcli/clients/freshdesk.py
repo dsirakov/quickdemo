@@ -7,7 +7,7 @@ from typing import Optional
 
 class FreshdeskContact(BaseModel):
     name: str
-    email: Optional[str] = None
+    email: str
     phone: Optional[str] = None
     mobile: Optional[str] = None
     twitter_id: Optional[str] = None
@@ -46,6 +46,20 @@ class CreatedContact(BaseModel):
     view_all_tickets: bool
     deleted: bool
     description: Optional[str] = None
+    email: str
+    id: int
+    job_title: Optional[str] = None
+    language: Optional[str] = None
+    phone: Optional[str] = None
+    name: str
+    mobile: Optional[str] = None
+    time_zone: Optional[str] = None
+    twitter_id: Optional[str] = None
+    other_emails: Optional[list[str]] = None
+    tags: Optional[list[str]] = None
+    avatar: Optional[bytes] = None
+    created_at: str
+    updated_at: str
 
 
 class FreshdeskClient:
@@ -58,7 +72,7 @@ class FreshdeskClient:
         self.auth = HTTPBasicAuth(token, "X")
         self.timeout = (5, 5)
 
-    def create_contact(self, contact: FreshdeskContact) -> str:
+    def create_contact(self, contact: FreshdeskContact) -> CreatedContact:
         endpoint = "/api/v2/contacts"
         data = FreshdeskContact.model_dump(contact)
         response = requests.post(
@@ -70,4 +84,4 @@ class FreshdeskClient:
         )
         response.raise_for_status()
 
-        return response.json()
+        return CreatedContact.model_validate_json(response.json())
